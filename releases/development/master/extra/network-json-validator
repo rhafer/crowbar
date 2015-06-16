@@ -184,6 +184,7 @@ class CrowbarNetwork
   attr_reader :broadcast_addr
   attr_reader :subnet_addr_full
   attr_reader :ranges
+  attr_reader :router
   attr_reader :conduit
   attr_reader :vlan
   attr_reader :use_vlan
@@ -421,6 +422,8 @@ def validate_networks databag
     if @networks['public'].use_vlan && @networks['nova_floating'].use_vlan &&
         @networks['public'].vlan == @networks['nova_floating'].vlan
       raise "When using the same VLAN 'nova_floating' must be a subnetwork of the 'public' network"
+    elsif @networks['nova_floating'].router.nil?
+      raise "'nova_floating' network must have a router defined when not a subnetwork of 'public' network"
     end
   end
 
