@@ -418,13 +418,9 @@ def validate_networks databag
     end
   end
 
-  if not @networks['public'].subnet_addr_full.include?(@networks['nova_floating'].subnet_addr_full)
-    if @networks['public'].use_vlan && @networks['nova_floating'].use_vlan &&
-        @networks['public'].vlan == @networks['nova_floating'].vlan
-      raise "When using the same VLAN 'nova_floating' must be a subnetwork of the 'public' network"
-    elsif @networks['nova_floating'].router.nil?
-      raise "'nova_floating' network must have a router defined when not a subnetwork of 'public' network"
-    end
+  if not @networks['public'].subnet_addr_full.include?(@networks['nova_floating'].subnet_addr_full) &&
+    @networks['nova_floating'].router.nil?
+    raise "'nova_floating' network must have a router defined when not a subnetwork of 'public' network"
   end
 
   if @networks['bmc'].subnet_addr_full != @networks['admin'].subnet_addr_full
